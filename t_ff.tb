@@ -1,0 +1,49 @@
+`timescale 1ns / 1ps
+
+module t_flipflop_tb;
+
+    // Testbench signals
+    reg t;
+    reg clk;
+    reg rst;
+    wire q;
+    wire q_bar;
+
+    // Instantiate the T Flip-Flop module
+    t_flipflop uut (
+        .t(t),
+        .clk(clk),
+        .rst(rst),
+        .q(q),
+        .q_bar(q_bar)
+    );
+
+    // Clock generation (period = 20 ns, frequency = 50 MHz)
+    always #10 clk = ~clk;
+
+    initial begin
+        
+        clk = 0;
+        t = 0;
+        rst = 0;
+
+        
+        #5 rst = 1;   
+        #10 rst = 0;  
+        #10 rst = 1; 
+        
+        #10 t = 1;  
+        #40 t = 0;  
+        #40 t = 1;
+        #40 t = 1;  
+        #20 t = 0;  
+        
+        #100 $stop;
+    end
+
+    initial begin
+        $monitor("Time=%0t | clk=%b | rst=%b | t=%b | q=%b | q_bar=%b", 
+                 $time, clk, rst, t, q, q_bar);
+    end
+
+endmodule
